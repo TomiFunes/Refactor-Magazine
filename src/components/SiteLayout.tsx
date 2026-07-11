@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { Github, Linkedin, Mail, Twitter, Languages } from "lucide-react";
 import type { ReactNode } from "react";
-import logoAsset from "@/assets/logo.png.asset.json";
+import logo from "@/assets/logo.png";
 import { useLang } from "@/lib/i18n";
 
 function NavLink({ to, children }: { to: string; children: ReactNode }) {
@@ -37,7 +37,7 @@ export function SiteHeader() {
     <header className="sticky top-0 z-40 border-b border-border/60 bg-background/70 backdrop-blur-xl">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
         <Link to="/" className="flex items-center gap-2">
-          <img src={logoAsset.url} alt="Refactor Magazine" className="h-8 w-auto" />
+          <img src={logo} alt="Refactor Magazine" className="h-8 w-auto" />
         </Link>
         <nav className="hidden items-center gap-8 md:flex">
           <NavLink to="/">{t("nav_home")}</NavLink>
@@ -65,24 +65,66 @@ export function SiteFooter() {
     <footer className="border-t border-border/60 bg-background/50">
       <div className="mx-auto grid max-w-6xl gap-8 px-6 py-12 md:grid-cols-3">
         <div>
-          <img src={logoAsset.url} alt="Refactor Magazine" className="h-8 w-auto" />
+          <img src={logo} alt="Refactor Magazine" className="h-8 w-auto" />
           <p className="mt-4 max-w-xs text-sm text-muted-foreground">{t("footer_tagline")}</p>
         </div>
         <div>
           <h4 className="text-sm font-semibold text-foreground">{t("footer_nav")}</h4>
           <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
-            <li><Link to="/articles" className="hover:text-foreground">{t("nav_articles")}</Link></li>
-            <li><Link to="/about" className="hover:text-foreground">{t("nav_about")}</Link></li>
-            <li><Link to="/contact" className="hover:text-foreground">{t("nav_contact")}</Link></li>
+            <li>
+              <Link to="/articles" className="hover:text-foreground">
+                {t("nav_articles")}
+              </Link>
+            </li>
+            <li>
+              <Link to="/about" className="hover:text-foreground">
+                {t("nav_about")}
+              </Link>
+            </li>
+            <li>
+              <Link to="/contact" className="hover:text-foreground">
+                {t("nav_contact")}
+              </Link>
+            </li>
           </ul>
         </div>
         <div>
           <h4 className="text-sm font-semibold text-foreground">{t("footer_connect")}</h4>
           <div className="mt-3 flex gap-3">
-            <a href="https://github.com" target="_blank" rel="noopener" aria-label="GitHub" className="rounded-full border border-border p-2 text-muted-foreground transition hover:border-primary hover:text-primary-glow"><Github className="h-4 w-4" /></a>
-            <a href="https://linkedin.com" target="_blank" rel="noopener" aria-label="LinkedIn" className="rounded-full border border-border p-2 text-muted-foreground transition hover:border-primary hover:text-primary-glow"><Linkedin className="h-4 w-4" /></a>
-            <a href="https://twitter.com" target="_blank" rel="noopener" aria-label="Twitter" className="rounded-full border border-border p-2 text-muted-foreground transition hover:border-primary hover:text-primary-glow"><Twitter className="h-4 w-4" /></a>
-            <a href="mailto:hola@refactor.magazine" aria-label="Email" className="rounded-full border border-border p-2 text-muted-foreground transition hover:border-primary hover:text-primary-glow"><Mail className="h-4 w-4" /></a>
+            <a
+              href="https://github.com"
+              target="_blank"
+              rel="noopener"
+              aria-label="GitHub"
+              className="rounded-full border border-border p-2 text-muted-foreground transition hover:border-primary hover:text-primary-glow"
+            >
+              <Github className="h-4 w-4" />
+            </a>
+            <a
+              href="https://linkedin.com"
+              target="_blank"
+              rel="noopener"
+              aria-label="LinkedIn"
+              className="rounded-full border border-border p-2 text-muted-foreground transition hover:border-primary hover:text-primary-glow"
+            >
+              <Linkedin className="h-4 w-4" />
+            </a>
+            <a
+              href="https://twitter.com"
+              target="_blank"
+              rel="noopener"
+              aria-label="Twitter"
+              className="rounded-full border border-border p-2 text-muted-foreground transition hover:border-primary hover:text-primary-glow"
+            >
+              <Twitter className="h-4 w-4" />
+            </a>
+            <a
+              href="mailto:hola@refactor.magazine"
+              aria-label="Email"
+              className="rounded-full border border-border p-2 text-muted-foreground transition hover:border-primary hover:text-primary-glow"
+            >
+              <Mail className="h-4 w-4" />
+            </a>
           </div>
         </div>
       </div>
