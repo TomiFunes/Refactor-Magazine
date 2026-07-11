@@ -23,7 +23,7 @@ function EditArticle() {
         cover_image_url: data.cover_image_url ?? "",
         category_id: data.category_id,
         author_id: data.author_id,
-        status: data.status,
+        status: (data.status as "draft" | "published") ?? "draft",
         featured: data.featured,
         reading_time: data.reading_time ?? 5,
         published_at: data.published_at,
