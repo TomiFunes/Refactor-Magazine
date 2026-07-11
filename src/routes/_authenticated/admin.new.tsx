@@ -47,9 +47,12 @@ export function ArticleEditor({ initial, articleId }: { initial: ArticleForm; ar
     const status = publish ? "published" : form.status;
     const payload = {
       title: form.title,
+      title_en: form.title_en || null,
       slug: form.slug || slugify(form.title),
       excerpt: form.excerpt || null,
+      excerpt_en: form.excerpt_en || null,
       content: form.content,
+      content_en: form.content_en || null,
       cover_image_url: form.cover_image_url || null,
       category_id: form.category_id || null,
       author_id: form.author_id || null,
