@@ -36,6 +36,7 @@ export function ArticleEditor({ initial, articleId }: { initial: ArticleForm; ar
   const [authors, setAuthors] = useState<{ id: string; name: string }[]>([]);
   const [saving, setSaving] = useState(false);
   const [preview, setPreview] = useState(false);
+  const [tab, setTab] = useState<"es" | "en">("es");
 
   useEffect(() => {
     supabase.from("categories").select("id, name").order("name").then(({ data }) => setCats(data ?? []));
