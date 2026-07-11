@@ -19,9 +19,11 @@ export type Database = {
           author_id: string | null
           category_id: string | null
           content: string
+          content_en: string | null
           cover_image_url: string | null
           created_at: string
           excerpt: string | null
+          excerpt_en: string | null
           featured: boolean
           id: string
           published_at: string | null
@@ -29,15 +31,18 @@ export type Database = {
           slug: string
           status: string
           title: string
+          title_en: string | null
           updated_at: string
         }
         Insert: {
           author_id?: string | null
           category_id?: string | null
           content?: string
+          content_en?: string | null
           cover_image_url?: string | null
           created_at?: string
           excerpt?: string | null
+          excerpt_en?: string | null
           featured?: boolean
           id?: string
           published_at?: string | null
@@ -45,15 +50,18 @@ export type Database = {
           slug: string
           status?: string
           title: string
+          title_en?: string | null
           updated_at?: string
         }
         Update: {
           author_id?: string | null
           category_id?: string | null
           content?: string
+          content_en?: string | null
           cover_image_url?: string | null
           created_at?: string
           excerpt?: string | null
+          excerpt_en?: string | null
           featured?: boolean
           id?: string
           published_at?: string | null
@@ -61,6 +69,7 @@ export type Database = {
           slug?: string
           status?: string
           title?: string
+          title_en?: string | null
           updated_at?: string
         }
         Relationships: [
@@ -131,6 +140,7 @@ export type Database = {
           description: string | null
           id: string
           name: string
+          name_en: string | null
           slug: string
         }
         Insert: {
@@ -138,6 +148,7 @@ export type Database = {
           description?: string | null
           id?: string
           name: string
+          name_en?: string | null
           slug: string
         }
         Update: {
@@ -145,6 +156,7 @@ export type Database = {
           description?: string | null
           id?: string
           name?: string
+          name_en?: string | null
           slug?: string
         }
         Relationships: []
