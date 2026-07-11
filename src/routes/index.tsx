@@ -7,7 +7,7 @@ import { SiteLayout } from "@/components/SiteLayout";
 import { ArticleCard, type ArticleCardData } from "@/components/ArticleCard";
 import { Newsletter } from "@/components/Newsletter";
 import heroDesk from "@/assets/hero-desk.jpg";
-import logoAsset from "@/assets/logo.png.asset.json";
+import logo from "@/assets/logo.png";
 import { useLang } from "@/lib/i18n";
 
 const homeArticlesQuery = queryOptions({
@@ -49,7 +49,7 @@ function Hero() {
       <div className="pointer-events-none absolute right-0 top-40 h-96 w-96 rounded-full bg-primary-glow/20 blur-[120px]" />
       <div className="mx-auto grid max-w-6xl gap-12 px-6 py-20 md:grid-cols-2 md:items-center md:py-32">
         <div className="animate-in fade-in slide-in-from-bottom-4 duration-700">
-          <img src={logoAsset.url} alt="Refactor Magazine" className="h-16 w-auto" />
+          <img src={logo} alt="Refactor Magazine" className="h-16 w-auto" />
           <span className="mt-8 inline-flex items-center gap-2 rounded-full border border-primary/40 bg-primary/10 px-3 py-1 text-xs font-medium text-primary-glow">
             <Sparkles className="h-3 w-3" /> {t("home_badge")}
           </span>
