@@ -103,37 +103,76 @@ export function ArticleEditor({ initial, articleId }: { initial: ArticleForm; ar
 
         <div className="mt-8 grid gap-6 md:grid-cols-[1fr_280px]">
           <div className="space-y-4">
-            <input
-              value={form.title}
-              onChange={(e) => setForm({ ...form, title: e.target.value, slug: form.slug || slugify(e.target.value) })}
-              placeholder="Título del artículo"
-              className="w-full rounded-xl border border-border bg-input px-4 py-3 font-display text-2xl font-bold outline-none focus:border-primary"
-            />
-            <input
-              value={form.slug}
-              onChange={(e) => setForm({ ...form, slug: slugify(e.target.value) })}
-              placeholder="slug-url"
-              className="w-full rounded-lg border border-border bg-input px-3 py-2 text-sm font-mono outline-none focus:border-primary"
-            />
-            <textarea
-              value={form.excerpt}
-              onChange={(e) => setForm({ ...form, excerpt: e.target.value })}
-              placeholder="Extracto breve (aparece en tarjetas y SEO)"
-              rows={2}
-              className="w-full resize-none rounded-lg border border-border bg-input px-3 py-2 text-sm outline-none focus:border-primary"
-            />
-            {preview ? (
-              <div className="prose-refactor min-h-[400px] rounded-xl border border-border bg-input p-6" dangerouslySetInnerHTML={{ __html: rendered }} />
+            <div className="flex gap-1 rounded-full border border-border bg-input p-1 text-xs font-medium w-fit">
+              <button type="button" onClick={() => setTab("es")} className={`rounded-full px-3 py-1 ${tab === "es" ? "bg-primary text-primary-foreground" : "text-muted-foreground"}`}>Español</button>
+              <button type="button" onClick={() => setTab("en")} className={`rounded-full px-3 py-1 ${tab === "en" ? "bg-primary text-primary-foreground" : "text-muted-foreground"}`}>English</button>
+            </div>
+            {tab === "es" ? (
+              <>
+                <input
+                  value={form.title}
+                  onChange={(e) => setForm({ ...form, title: e.target.value, slug: form.slug || slugify(e.target.value) })}
+                  placeholder="Título del artículo"
+                  className="w-full rounded-xl border border-border bg-input px-4 py-3 font-display text-2xl font-bold outline-none focus:border-primary"
+                />
+                <input
+                  value={form.slug}
+                  onChange={(e) => setForm({ ...form, slug: slugify(e.target.value) })}
+                  placeholder="slug-url"
+                  className="w-full rounded-lg border border-border bg-input px-3 py-2 text-sm font-mono outline-none focus:border-primary"
+                />
+                <textarea
+                  value={form.excerpt}
+                  onChange={(e) => setForm({ ...form, excerpt: e.target.value })}
+                  placeholder="Extracto breve (aparece en tarjetas y SEO)"
+                  rows={2}
+                  className="w-full resize-none rounded-lg border border-border bg-input px-3 py-2 text-sm outline-none focus:border-primary"
+                />
+                {preview ? (
+                  <div className="prose-refactor min-h-[400px] rounded-xl border border-border bg-input p-6" dangerouslySetInnerHTML={{ __html: rendered }} />
+                ) : (
+                  <textarea
+                    value={form.content}
+                    onChange={(e) => setForm({ ...form, content: e.target.value })}
+                    placeholder="# Empieza a escribir en Markdown…"
+                    rows={22}
+                    className="w-full rounded-xl border border-border bg-input px-4 py-3 font-mono text-sm leading-relaxed outline-none focus:border-primary"
+                  />
+                )}
+              </>
             ) : (
-              <textarea
-                value={form.content}
-                onChange={(e) => setForm({ ...form, content: e.target.value })}
-                placeholder="# Empieza a escribir en Markdown…"
-                rows={22}
-                className="w-full rounded-xl border border-border bg-input px-4 py-3 font-mono text-sm leading-relaxed outline-none focus:border-primary"
-              />
+              <>
+                <input
+                  value={form.title_en}
+                  onChange={(e) => setForm({ ...form, title_en: e.target.value })}
+                  placeholder="Article title (English)"
+                  className="w-full rounded-xl border border-border bg-input px-4 py-3 font-display text-2xl font-bold outline-none focus:border-primary"
+                />
+                <textarea
+                  value={form.excerpt_en}
+                  onChange={(e) => setForm({ ...form, excerpt_en: e.target.value })}
+                  placeholder="Short excerpt (English)"
+                  rows={2}
+                  className="w-full resize-none rounded-lg border border-border bg-input px-3 py-2 text-sm outline-none focus:border-primary"
+                />
+                {preview ? (
+                  <div className="prose-refactor min-h-[400px] rounded-xl border border-border bg-input p-6" dangerouslySetInnerHTML={{ __html: rendered }} />
+                ) : (
+                  <textarea
+                    value={form.content_en}
+                    onChange={(e) => setForm({ ...form, content_en: e.target.value })}
+                    placeholder="# Start writing in Markdown (English)…"
+                    rows={22}
+                    className="w-full rounded-xl border border-border bg-input px-4 py-3 font-mono text-sm leading-relaxed outline-none focus:border-primary"
+                  />
+                )}
+                <p className="text-xs text-muted-foreground">
+                  Los campos en inglés son opcionales. Si se dejan vacíos, los lectores en inglés verán la versión en español.
+                </p>
+              </>
             )}
           </div>
+
 
           <aside className="space-y-4">
             <Panel title="Portada">
