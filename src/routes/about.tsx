@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Github, Linkedin, Twitter, Mail } from "lucide-react";
 import { SiteLayout } from "@/components/SiteLayout";
+import { useLang } from "@/lib/i18n";
 
 export const Route = createFileRoute("/about")({
   head: () => ({
@@ -22,12 +23,13 @@ const stack = [
 ];
 
 function AboutPage() {
+  const { t } = useLang();
   return (
     <SiteLayout>
       <div className="mx-auto max-w-4xl px-6 py-20">
-        <span className="text-xs font-semibold uppercase tracking-widest text-primary-glow">Sobre mí</span>
+        <span className="text-xs font-semibold uppercase tracking-widest text-primary-glow">{t("about_eyebrow")}</span>
         <h1 className="mt-2 font-display text-4xl font-bold md:text-5xl">
-          Ingeniero de software escribiendo <span className="text-gradient">en voz alta</span>.
+          {t("about_title_1")} <span className="text-gradient">{t("about_title_2")}</span>.
         </h1>
 
         <div className="mt-12 grid gap-10 md:grid-cols-[220px_1fr]">
@@ -44,32 +46,20 @@ function AboutPage() {
           </div>
 
           <div className="space-y-5 text-lg text-muted-foreground">
+            <p>{t("about_p1")}</p>
             <p>
-              Soy desarrollador de software con más de una década construyendo
-              productos digitales — desde APIs de alto rendimiento hasta
-              interfaces obsesivamente cuidadas. Escribo sobre lo que aprendo
-              en el camino.
+              {t("about_p2_pre")}<strong className="text-foreground">{t("about_p2_strong")}</strong>{t("about_p2_post")}
             </p>
-            <p>
-              <strong className="text-foreground">Refactor Magazine</strong> es
-              mi espacio para pensar en público: notas técnicas, patrones de
-              arquitectura, experimentos con IA y reflexiones sobre la
-              disciplina de construir.
-            </p>
-            <p>
-              Creo que el código es una forma de escritura y que refactorizar
-              — nuestros sistemas y también nuestras ideas — es el trabajo más
-              importante.
-            </p>
+            <p>{t("about_p3")}</p>
           </div>
         </div>
 
         <div className="mt-16">
-          <h2 className="font-display text-2xl font-bold">Stack favorito</h2>
+          <h2 className="font-display text-2xl font-bold">{t("about_stack")}</h2>
           <div className="mt-4 flex flex-wrap gap-2">
-            {stack.map((t) => (
-              <span key={t} className="rounded-full border border-border bg-background/40 px-3 py-1 text-sm text-muted-foreground">
-                {t}
+            {stack.map((s) => (
+              <span key={s} className="rounded-full border border-border bg-background/40 px-3 py-1 text-sm text-muted-foreground">
+                {s}
               </span>
             ))}
           </div>
@@ -77,9 +67,9 @@ function AboutPage() {
 
         <div className="mt-16 grid gap-4 md:grid-cols-3">
           {[
-            { k: "10+", v: "años en la industria" },
-            { k: "50+", v: "proyectos entregados" },
-            { k: "∞", v: "curiosidad técnica" },
+            { k: "10+", v: t("about_stat_1") },
+            { k: "50+", v: t("about_stat_2") },
+            { k: "∞", v: t("about_stat_3") },
           ].map((s) => (
             <div key={s.v} className="rounded-2xl border border-border/60 bg-card-gradient p-6">
               <div className="font-display text-3xl font-bold text-gradient">{s.k}</div>

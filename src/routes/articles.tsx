@@ -1,10 +1,11 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { useSuspenseQuery, queryOptions } from "@tanstack/react-query";
 import { useState, useMemo, Suspense } from "react";
 import { Search } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { SiteLayout } from "@/components/SiteLayout";
 import { ArticleCard, type ArticleCardData } from "@/components/ArticleCard";
+import { useLang, pickLocalized } from "@/lib/i18n";
 
 const articlesQuery = queryOptions({
   queryKey: ["articles-list"],
@@ -12,10 +13,10 @@ const articlesQuery = queryOptions({
     const [{ data: articles, error: e1 }, { data: cats, error: e2 }] = await Promise.all([
       supabase
         .from("articles")
-        .select("id, slug, title, excerpt, content, cover_image_url, reading_time, published_at, category:categories(id, name, slug)")
+        .select("id, slug, title, title_en, excerpt, excerpt_en, content, content_en, cover_image_url, reading_time, published_at, category:categories(id, name, name_en, slug)")
         .eq("status", "published")
         .order("published_at", { ascending: false }),
-      supabase.from("categories").select("id, name, slug").order("name"),
+      supabase.from("categories").select("id, name, name_en, slug").order("name"),
     ]);
     if (e1) throw e1;
     if (e2) throw e2;
@@ -39,18 +40,16 @@ export const Route = createFileRoute("/articles")({
 });
 
 function ArticlesPage() {
+  const { t } = useLang();
   return (
     <SiteLayout>
       <div className="mx-auto max-w-6xl px-6 py-16">
         <div className="mb-10">
-          <span className="text-xs font-semibold uppercase tracking-widest text-primary-glow">Biblioteca</span>
-          <h1 className="mt-2 font-display text-4xl font-bold md:text-5xl">Todos los artículos</h1>
-          <p className="mt-3 max-w-2xl text-muted-foreground">
-            Filtra por categoría o busca por título y contenido. Escritos con
-            profundidad técnica y estilo editorial.
-          </p>
+          <span className="text-xs font-semibold uppercase tracking-widest text-primary-glow">{t("articles_eyebrow")}</span>
+          <h1 className="mt-2 font-display text-4xl font-bold md:text-5xl">{t("articles_title")}</h1>
+          <p className="mt-3 max-w-2xl text-muted-foreground">{t("articles_subtitle")}</p>
         </div>
-        <Suspense fallback={<div className="py-16 text-center text-muted-foreground">Cargando…</div>}>
+        <Suspense fallback={<div className="py-16 text-center text-muted-foreground">…</div>}>
           <ArticlesGrid />
         </Suspense>
       </div>
@@ -59,6 +58,7 @@ function ArticlesPage() {
 }
 
 function ArticlesGrid() {
+  const { t, lang } = useLang();
   const { data } = useSuspenseQuery(articlesQuery);
   const [query, setQuery] = useState("");
   const [cat, setCat] = useState<string | null>(null);
@@ -68,11 +68,14 @@ function ArticlesGrid() {
       if (cat && a.category?.slug !== cat) return false;
       if (query) {
         const q = query.toLowerCase();
-        return a.title.toLowerCase().includes(q) || (a.excerpt ?? "").toLowerCase().includes(q) || (a.content ?? "").toLowerCase().includes(q);
+        const title = pickLocalized(lang, a.title, a.title_en).toLowerCase();
+        const excerpt = pickLocalized(lang, a.excerpt, a.excerpt_en).toLowerCase();
+        const content = pickLocalized(lang, a.content, a.content_en).toLowerCase();
+        return title.includes(q) || excerpt.includes(q) || content.includes(q);
       }
       return true;
     });
-  }, [data.articles, query, cat]);
+  }, [data.articles, query, cat, lang]);
 
   return (
     <>
@@ -82,15 +85,15 @@ function ArticlesGrid() {
           <input
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Buscar artículos…"
+            placeholder={t("articles_search_placeholder")}
             className="w-full rounded-full border border-border bg-input py-3 pl-11 pr-4 text-sm outline-none transition-colors focus:border-primary"
           />
         </div>
         <div className="flex flex-wrap gap-2">
-          <FilterChip active={cat === null} onClick={() => setCat(null)}>Todas</FilterChip>
+          <FilterChip active={cat === null} onClick={() => setCat(null)}>{t("articles_filter_all")}</FilterChip>
           {data.categories.map((c: any) => (
             <FilterChip key={c.id} active={cat === c.slug} onClick={() => setCat(c.slug)}>
-              {c.name}
+              {pickLocalized(lang, c.name, c.name_en)}
             </FilterChip>
           ))}
         </div>
@@ -98,7 +101,7 @@ function ArticlesGrid() {
 
       {filtered.length === 0 ? (
         <div className="rounded-2xl border border-border/60 bg-card-gradient p-16 text-center text-muted-foreground">
-          No hay artículos que coincidan con tu búsqueda.
+          {t("articles_empty")}
         </div>
       ) : (
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">

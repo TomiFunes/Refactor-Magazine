@@ -8,13 +8,14 @@ import { ArticleCard, type ArticleCardData } from "@/components/ArticleCard";
 import { Newsletter } from "@/components/Newsletter";
 import heroDesk from "@/assets/hero-desk.jpg";
 import logoAsset from "@/assets/logo.png.asset.json";
+import { useLang } from "@/lib/i18n";
 
 const homeArticlesQuery = queryOptions({
   queryKey: ["home-articles"],
   queryFn: async () => {
     const { data, error } = await supabase
       .from("articles")
-      .select("id, slug, title, excerpt, cover_image_url, reading_time, published_at, featured, category:categories(name, slug)")
+      .select("id, slug, title, title_en, excerpt, excerpt_en, cover_image_url, reading_time, published_at, featured, category:categories(name, name_en, slug)")
       .eq("status", "published")
       .order("published_at", { ascending: false })
       .limit(9);
@@ -32,7 +33,7 @@ function Home() {
   return (
     <SiteLayout>
       <Hero />
-      <Suspense fallback={<div className="py-24 text-center text-muted-foreground">Cargando…</div>}>
+      <Suspense fallback={<div className="py-24 text-center text-muted-foreground">…</div>}>
         <FeaturedAndLatest />
       </Suspense>
       <Newsletter />
@@ -41,6 +42,7 @@ function Home() {
 }
 
 function Hero() {
+  const { t } = useLang();
   return (
     <section className="relative overflow-hidden">
       <div className="pointer-events-none absolute -left-32 top-20 h-96 w-96 rounded-full bg-primary/25 blur-[120px]" />
@@ -49,29 +51,26 @@ function Hero() {
         <div className="animate-in fade-in slide-in-from-bottom-4 duration-700">
           <img src={logoAsset.url} alt="Refactor Magazine" className="h-16 w-auto" />
           <span className="mt-8 inline-flex items-center gap-2 rounded-full border border-primary/40 bg-primary/10 px-3 py-1 text-xs font-medium text-primary-glow">
-            <Sparkles className="h-3 w-3" /> Portfolio editorial de tecnología
+            <Sparkles className="h-3 w-3" /> {t("home_badge")}
           </span>
           <h1 className="mt-6 font-display text-4xl font-bold leading-[1.05] tracking-tight md:text-6xl">
-            Ideas que transforman{" "}
-            <span className="text-gradient">código en conocimiento.</span>
+            {t("home_title_1")}{" "}
+            <span className="text-gradient">{t("home_title_2")}</span>
           </h1>
-          <p className="mt-6 max-w-lg text-lg text-muted-foreground">
-            Artículos sobre programación, inteligencia artificial, arquitectura
-            de software y tecnología — escritos con obsesión por la claridad.
-          </p>
+          <p className="mt-6 max-w-lg text-lg text-muted-foreground">{t("home_subtitle")}</p>
           <div className="mt-8 flex flex-wrap gap-3">
             <Link
               to="/articles"
               className="group inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground shadow-glow transition-transform hover:scale-105"
             >
-              Explorar artículos
+              {t("home_cta_explore")}
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
             </Link>
             <Link
               to="/about"
               className="inline-flex items-center rounded-full border border-border bg-background/40 px-6 py-3 text-sm font-medium backdrop-blur transition hover:border-primary/50 hover:text-primary-glow"
             >
-              Sobre el autor
+              {t("home_cta_about")}
             </Link>
           </div>
         </div>
@@ -81,7 +80,7 @@ function Hero() {
             src={heroDesk}
             width={1600}
             height={1200}
-            alt="Escritorio de programación con luces violetas"
+            alt={t("home_hero_alt")}
             className="relative aspect-[4/3] w-full rounded-3xl border border-border/60 object-cover shadow-glow"
           />
         </div>
@@ -91,6 +90,7 @@ function Hero() {
 }
 
 function FeaturedAndLatest() {
+  const { t } = useLang();
   const { data } = useSuspenseQuery(homeArticlesQuery);
   const featured = data.filter((a) => a.featured).slice(0, 3);
   const latest = data.slice(0, 6);
@@ -99,7 +99,7 @@ function FeaturedAndLatest() {
     <div className="mx-auto max-w-6xl px-6 py-16">
       {featured.length > 0 && (
         <section className="mb-20">
-          <SectionHeading eyebrow="Destacados" title="Artículos que marcaron la diferencia" />
+          <SectionHeading eyebrow={t("home_featured_eyebrow")} title={t("home_featured_title")} />
           <div className="mt-8 grid gap-6 md:grid-cols-2">
             {featured.map((a) => (
               <ArticleCard key={a.id} article={a} />
@@ -109,14 +109,14 @@ function FeaturedAndLatest() {
       )}
       <section>
         <div className="flex items-end justify-between">
-          <SectionHeading eyebrow="Últimos publicados" title="Lo más reciente" />
+          <SectionHeading eyebrow={t("home_latest_eyebrow")} title={t("home_latest_title")} />
           <Link to="/articles" className="hidden text-sm font-medium text-primary-glow hover:underline md:inline">
-            Ver todos →
+            {t("home_view_all")}
           </Link>
         </div>
         {latest.length === 0 ? (
           <div className="mt-12 rounded-2xl border border-border/60 bg-card-gradient p-12 text-center text-muted-foreground">
-            Aún no hay artículos publicados. Vuelve pronto.
+            {t("home_empty")}
           </div>
         ) : (
           <div className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
