@@ -1,27 +1,28 @@
 import { Link } from "@tanstack/react-router";
 import { Clock } from "lucide-react";
+import { useLang, pickLocalized, formatDate } from "@/lib/i18n";
 
 export interface ArticleCardData {
   id: string;
   slug: string;
   title: string;
+  title_en?: string | null;
   excerpt: string | null;
+  excerpt_en?: string | null;
   cover_image_url: string | null;
   reading_time: number;
   published_at: string | null;
-  category?: { name: string; slug: string } | null;
-}
-
-function formatDate(iso: string | null) {
-  if (!iso) return "";
-  return new Date(iso).toLocaleDateString("es-ES", {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-  });
+  category?: { name: string; name_en?: string | null; slug: string } | null;
 }
 
 export function ArticleCard({ article, featured }: { article: ArticleCardData; featured?: boolean }) {
+  const { lang, t } = useLang();
+  const title = pickLocalized(lang, article.title, article.title_en);
+  const excerpt = pickLocalized(lang, article.excerpt, article.excerpt_en);
+  const catName = article.category
+    ? pickLocalized(lang, article.category.name, article.category.name_en)
+    : null;
+
   return (
     <Link
       to="/articles/$slug"
@@ -32,7 +33,7 @@ export function ArticleCard({ article, featured }: { article: ArticleCardData; f
         {article.cover_image_url ? (
           <img
             src={article.cover_image_url}
-            alt={article.title}
+            alt={title}
             loading="lazy"
             className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
           />
@@ -45,22 +46,22 @@ export function ArticleCard({ article, featured }: { article: ArticleCardData; f
       </div>
       <div className="flex flex-1 flex-col gap-3 p-6">
         <div className="flex items-center gap-3 text-xs text-muted-foreground">
-          {article.category && (
+          {catName && (
             <span className="rounded-full border border-primary/40 bg-primary/10 px-2.5 py-0.5 font-medium text-primary-glow">
-              {article.category.name}
+              {catName}
             </span>
           )}
-          <span>{formatDate(article.published_at)}</span>
-          <span className="flex items-center gap-1"><Clock className="h-3 w-3" />{article.reading_time} min</span>
+          <span>{formatDate(article.published_at, lang)}</span>
+          <span className="flex items-center gap-1"><Clock className="h-3 w-3" />{article.reading_time} {t("card_minutes")}</span>
         </div>
         <h3 className={`font-display font-bold leading-tight text-foreground transition-colors group-hover:text-primary-glow ${featured ? "text-2xl md:text-3xl" : "text-xl"}`}>
-          {article.title}
+          {title}
         </h3>
-        {article.excerpt && (
-          <p className="line-clamp-3 text-sm text-muted-foreground">{article.excerpt}</p>
+        {excerpt && (
+          <p className="line-clamp-3 text-sm text-muted-foreground">{excerpt}</p>
         )}
         <span className="mt-auto inline-flex items-center gap-1 text-sm font-medium text-primary-glow">
-          Leer más <span aria-hidden className="transition-transform group-hover:translate-x-1">→</span>
+          {t("card_read_more")} <span aria-hidden className="transition-transform group-hover:translate-x-1">→</span>
         </span>
       </div>
     </Link>
