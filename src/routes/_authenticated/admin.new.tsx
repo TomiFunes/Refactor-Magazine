@@ -74,7 +74,8 @@ export function ArticleEditor({ initial, articleId }: { initial: ArticleForm; ar
     navigate({ to: "/admin" });
   }
 
-  const rendered = preview ? renderMarkdown(form.content).html : "";
+  const currentContent = tab === "en" ? form.content_en : form.content;
+  const rendered = preview ? renderMarkdown(currentContent).html : "";
 
   return (
     <SiteLayout>
