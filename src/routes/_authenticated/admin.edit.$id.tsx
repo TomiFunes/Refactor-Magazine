@@ -17,9 +17,12 @@ function EditArticle() {
       if (!data) return;
       setInitial({
         title: data.title ?? "",
+        title_en: data.title_en ?? "",
         slug: data.slug ?? "",
         excerpt: data.excerpt ?? "",
+        excerpt_en: data.excerpt_en ?? "",
         content: data.content ?? "",
+        content_en: data.content_en ?? "",
         cover_image_url: data.cover_image_url ?? "",
         category_id: data.category_id,
         author_id: data.author_id,
