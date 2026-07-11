@@ -9,9 +9,12 @@ import { ArrowLeft } from "lucide-react";
 export interface ArticleForm {
   id?: string;
   title: string;
+  title_en: string;
   slug: string;
   excerpt: string;
+  excerpt_en: string;
   content: string;
+  content_en: string;
   cover_image_url: string;
   category_id: string | null;
   author_id: string | null;
