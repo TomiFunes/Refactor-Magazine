@@ -192,7 +192,8 @@ function Panel({ title, children }: { title: string; children: React.ReactNode }
 }
 
 const emptyForm: ArticleForm = {
-  title: "", slug: "", excerpt: "", content: "", cover_image_url: "",
+  title: "", title_en: "", slug: "", excerpt: "", excerpt_en: "",
+  content: "", content_en: "", cover_image_url: "",
   category_id: null, author_id: null, status: "draft", featured: false,
   reading_time: 5, published_at: null,
 };
