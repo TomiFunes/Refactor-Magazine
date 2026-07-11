@@ -4,12 +4,13 @@ import { Github, Linkedin, Mail } from "lucide-react";
 import { SiteLayout } from "@/components/SiteLayout";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { useLang } from "@/lib/i18n";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
     meta: [
       { title: "Contacto — Refactor Magazine" },
-      { name: "description", content: "Ponte en contacto con Refactor Magazine. Colaboraciones, proyectos y preguntas." },
+      { name: "description", content: "Ponte en contacto con Refactor Magazine." },
       { property: "og:title", content: "Contacto — Refactor Magazine" },
       { property: "og:description", content: "Ponte en contacto con Refactor Magazine." },
       { property: "og:url", content: "/contact" },
@@ -20,6 +21,7 @@ export const Route = createFileRoute("/contact")({
 });
 
 function ContactPage() {
+  const { t } = useLang();
   const [form, setForm] = useState({ name: "", email: "", subject: "", message: "" });
   const [loading, setLoading] = useState(false);
 
@@ -28,8 +30,8 @@ function ContactPage() {
     setLoading(true);
     const { error } = await supabase.from("contact_messages").insert(form);
     setLoading(false);
-    if (error) return toast.error("No pudimos enviar tu mensaje.");
-    toast.success("Mensaje enviado. Te responderé pronto.");
+    if (error) return toast.error(t("contact_error"));
+    toast.success(t("contact_success"));
     setForm({ name: "", email: "", subject: "", message: "" });
   }
 
@@ -38,14 +40,9 @@ function ContactPage() {
       <div className="mx-auto max-w-5xl px-6 py-20">
         <div className="grid gap-16 md:grid-cols-2 md:items-start">
           <div>
-            <span className="text-xs font-semibold uppercase tracking-widest text-primary-glow">Contacto</span>
-            <h1 className="mt-2 font-display text-4xl font-bold md:text-5xl">
-              Hablemos.
-            </h1>
-            <p className="mt-4 text-muted-foreground">
-              ¿Colaboración, feedback, propuesta o simplemente saludar?
-              Escríbeme y te responderé personalmente.
-            </p>
+            <span className="text-xs font-semibold uppercase tracking-widest text-primary-glow">{t("contact_eyebrow")}</span>
+            <h1 className="mt-2 font-display text-4xl font-bold md:text-5xl">{t("contact_title")}</h1>
+            <p className="mt-4 text-muted-foreground">{t("contact_subtitle")}</p>
             <div className="mt-8 space-y-4 text-sm">
               <a href="mailto:hola@refactor.magazine" className="flex items-center gap-3 text-muted-foreground transition hover:text-foreground">
                 <Mail className="h-5 w-5 text-primary-glow" /> hola@refactor.magazine
@@ -60,20 +57,20 @@ function ContactPage() {
           </div>
 
           <form onSubmit={onSubmit} className="space-y-4 rounded-2xl border border-border/60 bg-card-gradient p-6 shadow-card">
-            <Field label="Nombre">
+            <Field label={t("contact_field_name")}>
               <input required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} className="w-full rounded-lg border border-border bg-input px-3 py-2 text-sm outline-none focus:border-primary" />
             </Field>
-            <Field label="Email">
+            <Field label={t("contact_field_email")}>
               <input type="email" required value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} className="w-full rounded-lg border border-border bg-input px-3 py-2 text-sm outline-none focus:border-primary" />
             </Field>
-            <Field label="Asunto">
+            <Field label={t("contact_field_subject")}>
               <input value={form.subject} onChange={(e) => setForm({ ...form, subject: e.target.value })} className="w-full rounded-lg border border-border bg-input px-3 py-2 text-sm outline-none focus:border-primary" />
             </Field>
-            <Field label="Mensaje">
+            <Field label={t("contact_field_message")}>
               <textarea required rows={5} value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} className="w-full resize-none rounded-lg border border-border bg-input px-3 py-2 text-sm outline-none focus:border-primary" />
             </Field>
             <button disabled={loading} className="w-full rounded-full bg-primary py-3 text-sm font-semibold text-primary-foreground shadow-glow transition-transform hover:scale-[1.02] disabled:opacity-50">
-              {loading ? "Enviando…" : "Enviar mensaje"}
+              {loading ? t("contact_sending") : t("contact_send")}
             </button>
           </form>
         </div>
